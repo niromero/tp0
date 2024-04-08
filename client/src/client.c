@@ -85,15 +85,20 @@ void leer_consola(t_log* logger)
 
 	// Vamos leyendo y logueando hasta recibir un string vacío
 	leido = readline("> ");
+
 	while (!string_is_empty(leido)) {
 		// También se podria usar strcmp() de la biblioteca estándar de C para comparar con un string vacío
+		// printf("%s\n", leido);
 		log_info(logger, ">> %s", leido);
+		free(leido);
 		leido = readline("> ");
 	}
-	// Commons para strings: https://github.com/sisoputnfrba/so-commons-library/blob/master/src/commons/string.h
 
-	// ¡No te olvides de liberar las lineas antes de regresar!
+	//printf("%s\n", leido);
 	free(leido);
+	//printf("%s\n", leido);
+	
+	// Commons para strings: https://github.com/sisoputnfrba/so-commons-library/blob/master/src/commons/string.h
 
 	return;
 }
@@ -115,6 +120,7 @@ void terminar_programa(int conexion, t_log* logger, t_config* config)
 {
 	/* Y por ultimo, hay que liberar lo que utilizamos (conexion, log y config) 
 	  con las funciones de las commons y del TP mencionadas en el enunciado */
+	liberar_conexion(conexion);
 	log_destroy(logger);
 	config_destroy(config);
 

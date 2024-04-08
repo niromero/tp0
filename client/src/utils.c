@@ -18,21 +18,43 @@ void* serializar_paquete(t_paquete* paquete, int bytes)
 
 int crear_conexion(char *ip, char* puerto)
 {
-	struct addrinfo hints;
-	struct addrinfo *server_info;
+	// Prueba de manejo de errores
+
+	if (ip == NULL || puerto == NULL) {
+        fprintf(stderr, "IP o puerto no pueden ser nulos.\n");
+        exit(EXIT_FAILURE);
+    }
+
+	struct addrinfo hints, *server_info;
+	int err;
 
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
 
-	getaddrinfo(ip, puerto, &hints, &server_info);
+	err = getaddrinfo(ip, puerto, &hints, &server_info);
+	if (err != 0) {
+		perror("Error al ejecutar getaddrinfo().");
+        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(err));
+        exit(EXIT_FAILURE);
+    }
 
-	// Ahora vamos a crear el socket.
-	int socket_cliente = 0;
+	if (server_info == NULL) {
+        fprintf(stderr, "No se pudo obtener la información del servidor.");
+        exit(EXIT_FAILURE);
+    }
 
-	// Ahora que tenemos el socket, vamos a conectarlo
-
+	// Ahora vamos a crear el socket y conectarlo.
+	int socket_cliente = socket(server_info->ai_family,
+                         server_info->ai_socktype,
+                         server_info->ai_protocol);
+	
+	if (socket_cliente == -1) {
+        perror("Error al crear el socket.");
+        freeaddrinfo(server_info);
+        exit(EXIT_FAILURE);
+    }
 
 	freeaddrinfo(server_info);
 
