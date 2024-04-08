@@ -45,7 +45,7 @@ int crear_conexion(char *ip, char* puerto)
         exit(EXIT_FAILURE);
     }
 
-	// Ahora vamos a crear el socket y conectarlo.
+	// Ahora vamos a crear el socket.
 	int socket_cliente = socket(server_info->ai_family,
                          server_info->ai_socktype,
                          server_info->ai_protocol);
@@ -55,6 +55,9 @@ int crear_conexion(char *ip, char* puerto)
         freeaddrinfo(server_info);
         exit(EXIT_FAILURE);
     }
+
+	// Y conectarlo.
+	connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen);
 
 	freeaddrinfo(server_info);
 
@@ -80,7 +83,6 @@ void enviar_mensaje(char* mensaje, int socket_cliente)
 	free(a_enviar);
 	eliminar_paquete(paquete);
 }
-
 
 void crear_buffer(t_paquete* paquete)
 {

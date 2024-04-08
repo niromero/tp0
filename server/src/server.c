@@ -6,6 +6,8 @@ int main(void) {
 	int server_fd = iniciar_servidor();
 	log_info(logger, "Servidor listo para recibir al cliente");
 	int cliente_fd = esperar_cliente(server_fd);
+	/* Una vez que el cliente fue aceptado, accept() retorna un nuevo socket (file descriptor)
+	   que representa la conexión BIDIRECCIONAL entre ambos procesos. */
 
 	t_list* lista;
 	while (1) {
