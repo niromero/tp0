@@ -42,6 +42,7 @@ int crear_conexion(char *ip, char* puerto)
 
 	if (server_info == NULL) {
         fprintf(stderr, "No se pudo obtener la información del servidor.");
+		freeaddrinfo(server_info);
         exit(EXIT_FAILURE);
     }
 
@@ -57,7 +58,12 @@ int crear_conexion(char *ip, char* puerto)
     }
 
 	// Y conectarlo.
-	connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen);
+	err = connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen);
+
+	if (err == -1)
+        perror("Error al conectar.");
+	else
+    	printf("Conexión establecida correctamente.\n");
 
 	freeaddrinfo(server_info);
 
