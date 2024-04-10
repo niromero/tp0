@@ -35,7 +35,7 @@ int crear_conexion(char *ip, char* puerto)
 
 	err = getaddrinfo(ip, puerto, &hints, &server_info);
 	if (err != 0) {
-		perror("Error al ejecutar getaddrinfo().");
+		perror("Error al ejecutar getaddrinfo()");
         fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(err));
         exit(EXIT_FAILURE);
     }
@@ -52,7 +52,7 @@ int crear_conexion(char *ip, char* puerto)
                          server_info->ai_protocol);
 	
 	if (socket_cliente == -1) {
-        perror("Error al crear el socket.");
+        perror("Error al crear el socket");
         freeaddrinfo(server_info);
         exit(EXIT_FAILURE);
     }
@@ -61,7 +61,7 @@ int crear_conexion(char *ip, char* puerto)
 	err = connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen);
 
 	if (err == -1)
-        perror("Error al conectar.");
+        perror("Error al conectar");
 	else
     	printf("Conexión establecida correctamente.\n");
 
